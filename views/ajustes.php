@@ -66,9 +66,10 @@
 
             <!-- TAB GENERAL-->
             <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="tab_general">
-                <div class="col-md-5">
 
-                    <div class="row">
+                <div class="row">
+
+                    <div class="col-md-5">
 
                         <h1 class="page-head-line">
                             Ajuste anual
@@ -103,11 +104,7 @@
 
                     </div>
 
-                </div>
-
-                <div class="col-md-5">
-
-                    <div class="row">
+                    <div class="col-md-5">
 
                         <h1 class="page-head-line">
                             Nomenclatura

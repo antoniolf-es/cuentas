@@ -174,6 +174,10 @@ class CuentasModel
 
     public function getGastosDetalle(array $filtros): array
     {
+        $categoria = (int) ($filtros['categoria'] ?? 0);
+        $estado    = (int) ($filtros['estado'] ?? 0);
+        $concepto  = (string) ($filtros['concepto'] ?? '');
+
         $sql = 'SELECT g.id_gasto, g.fecha, g.concepto, g.cantidad, g.nota, g.categoria
                 FROM cue_gastos g
                 WHERE g.fecha BETWEEN :desde AND :hasta';
@@ -183,21 +187,21 @@ class CuentasModel
             'hasta' => $filtros['fecha_hasta'],
         ];
 
-        if ($filtros['categoria'] !== 0 && $filtros['categoria'] !== '') {
+        if ($categoria > 0) {
             $sql .= ' AND g.categoria = :categoria';
-            $params['categoria'] = $filtros['categoria'];
+            $params['categoria'] = $categoria;
         }
 
-        if ($filtros['estado'] === 0 || $filtros['estado'] === '') {
+        if ($estado === 0) {
             $sql .= ' AND g.nota > 0';
-        } elseif ($filtros['estado'] !== 99) {
+        } elseif ($estado !== 99) {
             $sql .= ' AND g.nota = :estado';
-            $params['estado'] = $filtros['estado'];
+            $params['estado'] = $estado;
         }
 
-        if ($filtros['concepto'] !== '') {
+        if ($concepto !== '') {
             $sql .= ' AND g.concepto LIKE :concepto';
-            $params['concepto'] = '%' . $filtros['concepto'] . '%';
+            $params['concepto'] = '%' . $concepto . '%';
         }
 
         $sql .= ' ORDER BY g.fecha';

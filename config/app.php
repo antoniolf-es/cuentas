@@ -2,6 +2,7 @@
 
 return [
     'env' => getenv('APP_ENV') ?: 'production',
+    //'env' => getenv('APP_ENV') ?: 'development',
 
     // Dejar vacío para autodetectar según la URL actual
     'base_url' => '',

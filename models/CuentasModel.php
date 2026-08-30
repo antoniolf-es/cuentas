@@ -150,7 +150,7 @@ class CuentasModel
     public function archivar(string $mes, string $anio, array $totales): void
     {
         $existe = Database::fetchOne(
-            'SELECT id FROM cue_anual WHERE mes = :mes AND anio = :anio',
+            'SELECT id_anual FROM cue_anual WHERE mes = :mes AND anio = :anio',
             ['mes' => $mes, 'anio' => $anio]
         );
 

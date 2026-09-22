@@ -531,45 +531,46 @@
             datasets: [{
                 data: [<?= $total_ingresos ?>, <?= $total_gastos ?>, <?= $total_ahorro ?>, <?= $total_margen ?>],
                 backgroundColor: [
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(124, 211, 149, 0.35)',
+                    'rgba(255, 122, 135, 0.35)',
+                    'rgba(255, 213, 79, 0.35)',
+                    'rgba(90, 159, 255, 0.35)',
                 ],
                 borderColor: [
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(255,99,132,1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(54, 162, 235, 1)',
+                    'rgba(124, 211, 149, 1)',
+                    'rgba(255, 122, 135, 1)',
+                    'rgba(255, 213, 79, 1)',
+                    'rgba(90, 159, 255, 1)',
                 ],
-                borderWidth: 1
+                borderWidth: 2
             }]
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             legend: {
                 display: false,
                 labels: {
-                    fontColor: '#E0E0E0'
+                    fontColor: '#97A0B5'
                 }
             },
             scales: {
                 yAxes: [{
                     ticks: {
                         beginAtZero: true,
-                        fontColor: '#E0E0E0'
+                        fontColor: '#97A0B5'
                     },
                     gridLines: {
-                        color: '#555555',
-                        zeroLineColor: '#555555'
+                        color: 'rgba(255, 255, 255, 0.08)',
+                        zeroLineColor: 'rgba(255, 255, 255, 0.16)'
                     }
                 }],
                 xAxes: [{
                     ticks: {
-                        fontColor: '#E0E0E0'
+                        fontColor: '#97A0B5'
                     },
                     gridLines: {
-                        color: '#555555'
+                        display: false
                     }
                 }]
             }

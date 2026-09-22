@@ -1,23 +1,3 @@
-<style>
-    td,
-    th {
-        text-align: center !important;
-    }
-
-    .nav-item :hover {
-        cursor: pointer;
-    }
-
-    .nav-tabs .active {
-        background-color: #2C6ABE !important;
-        color: #fff !important;
-    }
-
-    #modal_wish {
-        margin-top: -100px;
-    }
-</style>
-
 <link href="<?= url('assets/css/datetimepicker.css') ?>" rel="stylesheet" />
 <script src="<?= url('assets/js/moment.min.js') ?>"></script>
 <script src="<?= url('assets/js/bootstrap-datetimepicker.min.js') ?>"></script>
@@ -35,7 +15,7 @@
             </li>
             <li class="nav-item" role="presentation">
                 <a class="nav-link" id="tab_categorias" data-toggle="tab" data-target="#categorias" type="button" role="tab" aria-controls="plantillas" aria-selected="false">
-                    <i class="fas fa-code-branch"></i> Categorias
+                    <i class="fas fa-code-branch"></i> Categorías
                 </a>
             </li>
             <li class="nav-item" role="presentation">
@@ -61,7 +41,7 @@
         </ul>
     </div>
 
-    <div class="col-md-12 mt-3">
+    <div class="col-md-12 mt-4">
         <div class="tab-content" id="myTabContent">
 
             <!-- TAB GENERAL-->
@@ -69,77 +49,88 @@
 
                 <div class="row">
 
-                    <div class="col-md-5">
+                    <div class="col-lg-6">
 
-                        <h1 class="page-head-line">
-                            Ajuste anual
-                            <a href="#" class="btn btn-primary" id="b_aj_anual" style="float: right; padding: 4px;" data-bind="tipo_0">
-                                <i class="fas fa-pen"></i>
-                            </a>
-                        </h1>
-                        <table id="ajustes" class="table table-striped" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Año</th>
-                                    <th>Margen</th>
-                                    <th>Debe/Haber</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php foreach ($rs_ajustes as $fila) { ?>
-                                    <tr>
-                                        <td><span class="badge badge-primary"><?= e($fila->anio) ?> </span></td>
-                                        <td>
-                                            <input type="text" class="form-control" id="margen_<?= e($fila->anio) ?>" value="<?= e((string) $fila->margen) ?>" onchange="cambiar_margen(<?= e($fila->anio) ?>)" />
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" id="inicial_<?= e($fila->anio) ?>" value="<?= e((string) $fila->inicial) ?>" onchange="cambiar_inicial(<?= e($fila->anio) ?>)" />
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-
-                        </table>
+                        <div class="card card-accent-primary card-table">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-sliders-h"></i> Ajuste anual</h2>
+                                <div class="card-actions">
+                                    <a href="#" class="icon-btn solid-primary" id="b_aj_anual" data-bind="tipo_0" title="Ajustar">
+                                        <i class="fas fa-pen"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="t_ajuste_anual" class="table table-centered">
+                                        <thead>
+                                            <tr>
+                                                <th>Año</th>
+                                                <th>Margen</th>
+                                                <th>Debe/Haber</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($rs_ajustes as $fila) { ?>
+                                                <tr>
+                                                    <td><span class="badge badge-primary"><?= e($fila->anio) ?> </span></td>
+                                                    <td>
+                                                        <input type="text" class="form-control" id="margen_<?= e($fila->anio) ?>" value="<?= e((string) $fila->margen) ?>" onchange="cambiar_margen(<?= e($fila->anio) ?>)" />
+                                                    </td>
+                                                    <td>
+                                                        <input type="text" class="form-control" id="inicial_<?= e($fila->anio) ?>" value="<?= e((string) $fila->inicial) ?>" onchange="cambiar_inicial(<?= e($fila->anio) ?>)" />
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
-                    <div class="col-md-5">
+                    <div class="col-lg-6">
 
-                        <h1 class="page-head-line">
-                            Nomenclatura
-                            <a href="#" class="btn btn-primary" style="float: right;" id="b_nomenclatura_nuevo">
-                                <i class="fa fa-plus-circle"></i>
-                            </a>
-                        </h1>
-                        <table id="t_nomenclatura" class="table table-striped" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Texto</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php foreach ($rs_nomenclatura as $fila) { ?>
-                                    <tr>
-                                        <td><span class="badge badge-info"><?= e($fila->codigo) ?></span></td>
-                                        <td style="text-align: left !important;"><span><?= e($fila->texto) ?> </span></td>
-                                        <td>
-                                            <a href="<?= url('ajustes/nomenclatura_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id ?>">
-                                                <i class="fas fa-trash-alt" style="float: right; margin-left: 10px;" title="eliminar"></i>
-                                            </a>
-                                            <a href="" class="nomenclatura_editar" data-bind="<?= $fila->id ?>">
-                                                <i class="fas fa-pen" style="float: right;" title="editar"></i>
-                                            </a>
-
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-
-                        </table>
+                        <div class="card card-table">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-font"></i> Nomenclatura</h2>
+                                <div class="card-actions">
+                                    <a href="#" class="icon-btn solid-primary" id="b_nomenclatura_nuevo" title="Nueva nomenclatura">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table id="t_nomenclatura" class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Código</th>
+                                                <th>Texto</th>
+                                                <th class="row-actions"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($rs_nomenclatura as $fila) { ?>
+                                                <tr>
+                                                    <td><span class="badge badge-info"><?= e($fila->codigo) ?></span></td>
+                                                    <td><span><?= e($fila->texto) ?> </span></td>
+                                                    <td class="row-actions">
+                                                        <a href="<?= url('ajustes/nomenclatura_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id ?>" title="Eliminar">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </a>
+                                                        <a href="" class="nomenclatura_editar" data-bind="<?= $fila->id ?>" title="Editar">
+                                                            <i class="fas fa-pen"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -148,46 +139,49 @@
 
             <!-- TAB CATEGORIAS-->
             <div class="tab-pane fade" id="categorias" role="tabpanel" aria-labelledby="tab_categorias">
-                <div class="col-md-6">
+                <div class="col-lg-7">
 
-                    <div class="row">
+                    <div class="card card-accent-primary card-table">
 
-                        <h1 class="page-head-line">
-                            Categorias
-                            <a href="#" class="btn btn-primary" style="float: right;" id="b_categorias_nuevo">
-                                <i class="fa fa-plus-circle"></i>
-                            </a>
-                        </h1>
-                        <table id="t_categorias" class="table table-striped" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Icono</th>
-                                    <th>Color hex</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php foreach ($rs_categorias as $fila) { ?>
-                                    <tr>
-                                        <td style="text-align: left !important; "><span><?= e($fila->nombre) ?> </span></td>
-                                        <td><span><i class="<?= e($fila->icono) ?>"></i></span></td>
-                                        <td><span class="badge" style="background-color: <?= e($fila->color) ?> ;"><?= e($fila->color) ?></span></td>
-                                        <td>
-                                            <a href="<?= url('ajustes/categorias_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_gasto_categoria ?>">
-                                                <i class="fas fa-trash-alt" style="float: right; margin-left: 10px;" title="eliminar"></i>
-                                            </a>
-                                            <a href="" class="categorias_editar" data-bind="<?= $fila->id_gasto_categoria ?>">
-                                                <i class="fas fa-pen" style="float: right;" title="editar"></i>
-                                            </a>
-
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-
-                        </table>
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="fas fa-tags"></i> Categorías</h2>
+                            <div class="card-actions">
+                                <a href="#" class="icon-btn solid-primary" id="b_categorias_nuevo" title="Nueva categoría">
+                                    <i class="fa fa-plus-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="t_categorias" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th class="text-center">Icono</th>
+                                            <th>Color hex</th>
+                                            <th class="row-actions"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($rs_categorias as $fila) { ?>
+                                            <tr>
+                                                <td><span><?= e($fila->nombre) ?> </span></td>
+                                                <td class="text-center"><span><i class="<?= e($fila->icono) ?>"></i></span></td>
+                                                <td><span class="badge" style="background-color: <?= e($fila->color) ?>;"><?= e($fila->color) ?></span></td>
+                                                <td class="row-actions">
+                                                    <a href="<?= url('ajustes/categorias_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_gasto_categoria ?>" title="Eliminar">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </a>
+                                                    <a href="" class="categorias_editar" data-bind="<?= $fila->id_gasto_categoria ?>" title="Editar">
+                                                        <i class="fas fa-pen"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -198,64 +192,68 @@
             <div class="tab-pane fade" id="wishlist" role="tabpanel" aria-labelledby="tab_wishlist">
                 <div class="col-md-12">
 
-                    <div class="row">
+                    <div class="card card-table">
 
-                        <h1 class="page-head-line">
-                            Wishlist
-                            <a href="#" class="btn btn-primary" style="float: right;" id="b_wish_nuevo">
-                                <i class="fa fa-plus-circle"></i>
-                            </a>
-                        </h1>
-                        <table id="ajustes" class="table table-striped" width="100%" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Fecha Aprox.</th>
-                                    <th>Fecha Final</th>
-                                    <th>Precio Aprox.</th>
-                                    <th>Precio Final</th>
-                                    <th>Nota</th>
-                                </tr>
-                            </thead>
-
-                            <tbody>
-                                <?php foreach ($rs_wishlist as $fila) {
-                                    switch ($fila->estado) {
-                                        case 1:
-                                            $clase = "#FFF3CD";
-                                            break; //pospuesto
-                                        case 2:
-                                            $clase = "#F8D7DA";
-                                            break; //descartada
-                                        case 3:
-                                            $clase = "#D4EDDA";
-                                            break; //hecho
-                                        default:
-                                            $clase = "#D1ECF1";
-                                            break; //pdte
-                                    }
-                                ?>
-                                    <tr style="background-color: <?= $clase ?> !important; color: #3E3E3E !important;">
-                                        <td style="text-align: left !important;"><span><?= e($fila->nombre) ?> </span></td>
-                                        <td><span class="badge badge-warning"><?= e($fila->fecha_aprox) ?></span></td>
-                                        <td><span class="badge badge-primary"><?= e($fila->fecha_final) ?></span></td>
-                                        <td><span class="badge badge-warning"><?= e((string) $fila->precio_aprox) ?> €</span></td>
-                                        <td><span class="badge badge-primary"><?= e((string) $fila->precio_final) ?> €</span></td>
-                                        <td style="text-align: left !important;">
-                                            <span><?= e($fila->nota) ?></span>
-                                            <a href="<?= url('ajustes/wish_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_wishlist ?>">
-                                                <i class="fas fa-trash-alt" style="float: right; margin-left: 10px;" title="eliminar"></i>
-                                            </a>
-                                            <a href="" class="wish_editar" data-bind="<?= $fila->id_wishlist ?>">
-                                                <i class="fas fa-pen" style="float: right;" title="editar"></i>
-                                            </a>
-
-                                        </td>
-                                    </tr>
-                                <?php } ?>
-                            </tbody>
-
-                        </table>
+                        <div class="card-header">
+                            <h2 class="card-title"><i class="far fa-grin-stars"></i> Wishlist</h2>
+                            <div class="card-actions">
+                                <a href="#" class="icon-btn solid-primary" id="b_wish_nuevo" title="Nuevo wishlist">
+                                    <i class="fa fa-plus-circle"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table id="t_wishlist" class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Fecha Aprox.</th>
+                                            <th>Fecha Final</th>
+                                            <th>Precio Aprox.</th>
+                                            <th>Precio Final</th>
+                                            <th>Nota</th>
+                                            <th class="row-actions"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($rs_wishlist as $fila) {
+                                            switch ($fila->estado) {
+                                                case 1:
+                                                    $clase = 'wish-1';
+                                                    break; //pospuesto
+                                                case 2:
+                                                    $clase = 'wish-2';
+                                                    break; //descartada
+                                                case 3:
+                                                    $clase = 'wish-3';
+                                                    break; //hecho
+                                                default:
+                                                    $clase = 'wish-0';
+                                                    break; //pdte
+                                            }
+                                        ?>
+                                            <tr class="<?= $clase ?>">
+                                                <td><span><?= e($fila->nombre) ?> </span></td>
+                                                <td><span class="badge badge-warning"><?= e($fila->fecha_aprox) ?></span></td>
+                                                <td><span class="badge badge-primary"><?= e($fila->fecha_final) ?></span></td>
+                                                <td class="num"><span class="badge badge-warning"><?= e((string) $fila->precio_aprox) ?> €</span></td>
+                                                <td class="num"><span class="badge badge-primary"><?= e((string) $fila->precio_final) ?> €</span></td>
+                                                <td><span><?= e($fila->nota) ?></span></td>
+                                                <td class="row-actions">
+                                                    <a href="<?= url('ajustes/wish_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_wishlist ?>" title="Eliminar">
+                                                        <i class="fas fa-trash-alt"></i>
+                                                    </a>
+                                                    <a href="" class="wish_editar" data-bind="<?= $fila->id_wishlist ?>" title="Editar">
+                                                        <i class="fas fa-pen"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
 
                     </div>
 
@@ -268,57 +266,81 @@
                 <div class="row">
 
                     <div class="col-md-4">
-                        <h1 class="page-head-line">
-                            NOTAS GENERAL
-                            <a href="#" class="btn btn-primary b_nota_nuevo" style="float: right; padding: 2px;" data-bind="tipo_0">
-                                <i class="fa fa-plus-circle"></i>
-                            </a>
-                        </h1>
-                        <?php foreach ($rs_notas_general as $fila) { ?>
-                            <div class="alert alert-info" style="width: 100%;">
-                                <span class="badge badge-info" style="margin-right: 15px;"><?= e($fila->fecha) ?></span>
-                                <span><?= e($fila->texto) ?></span>
-                                <span><a href="<?= url('ajustes/nota_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_nota ?>">
-                                        <i class="fas fa-trash-alt" style="float: right;" title="eliminar"></i>
-                                    </a></span>
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="far fa-sticky-note"></i> Notas general</h2>
+                                <div class="card-actions">
+                                    <a href="#" class="icon-btn solid-primary b_nota_nuevo" data-bind="tipo_0" title="Nueva nota">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </a>
+                                </div>
                             </div>
-                        <?php } ?>
+                            <div class="card-body">
+                                <div class="note-list">
+                                    <?php foreach ($rs_notas_general as $fila) { ?>
+                                        <div class="note-item">
+                                            <span class="badge badge-info"><?= e($fila->fecha) ?></span>
+                                            <span class="note-text"><?= e($fila->texto) ?></span>
+                                            <a href="<?= url('ajustes/nota_eliminar') ?>" class="e_eliminar note-del" data-bind="<?= $fila->id_nota ?>" title="Eliminar">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-md-4">
-                        <h1 class="page-head-line-ingresos">
-                            NOTAS INGRESOS
-                            <a href="#" class="btn btn-success b_nota_nuevo" style="float: right; padding: 2px;" data-bind="tipo_1">
-                                <i class="fa fa-plus-circle"></i>
-                            </a>
-                        </h1>
-                        <?php foreach ($rs_notas_ingresos as $fila) { ?>
-                            <div class="alert alert-success" style="width: 100%;">
-                                <span class="badge badge-success" style="margin-right: 15px;"><?= e($fila->fecha) ?></span>
-                                <span><?= e($fila->texto) ?></span>
-                                <span><a href="<?= url('ajustes/nota_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_nota ?>">
-                                        <i class="fas fa-trash-alt" style="float: right;" title="eliminar"></i>
-                                    </a></span>
+                        <div class="card card-accent-success">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-sign-in-alt"></i> Notas ingresos</h2>
+                                <div class="card-actions">
+                                    <a href="#" class="icon-btn solid-success b_nota_nuevo" data-bind="tipo_1" title="Nueva nota">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </a>
+                                </div>
                             </div>
-                        <?php } ?>
+                            <div class="card-body">
+                                <div class="note-list">
+                                    <?php foreach ($rs_notas_ingresos as $fila) { ?>
+                                        <div class="note-item">
+                                            <span class="badge badge-success"><?= e($fila->fecha) ?></span>
+                                            <span class="note-text"><?= e($fila->texto) ?></span>
+                                            <a href="<?= url('ajustes/nota_eliminar') ?>" class="e_eliminar note-del" data-bind="<?= $fila->id_nota ?>" title="Eliminar">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="col-md-4">
-                        <h1 class="page-head-line-gastos">
-                            NOTAS GASTOS
-                            <a href="#" class="btn btn-danger b_nota_nuevo" style="float: right; padding: 2px;" data-bind="tipo_2">
-                                <i class="fa fa-plus-circle"></i>
-                            </a>
-                        </h1>
-                        <?php foreach ($rs_notas_gastos as $fila) { ?>
-                            <div class="alert alert-danger" style="width: 100%;">
-                                <span class="badge badge-danger" style="margin-right: 15px;"><?= e($fila->fecha) ?></span>
-                                <span><?= e($fila->texto) ?></span>
-                                <span><a href="<?= url('ajustes/nota_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_nota ?>">
-                                        <i class="fas fa-trash-alt" style="float: right;" title="eliminar"></i>
-                                    </a></span>
+                        <div class="card card-accent-danger">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-sign-out-alt"></i> Notas gastos</h2>
+                                <div class="card-actions">
+                                    <a href="#" class="icon-btn solid-danger b_nota_nuevo" data-bind="tipo_2" title="Nueva nota">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </a>
+                                </div>
                             </div>
-                        <?php } ?>
+                            <div class="card-body">
+                                <div class="note-list">
+                                    <?php foreach ($rs_notas_gastos as $fila) { ?>
+                                        <div class="note-item">
+                                            <span class="badge badge-danger"><?= e($fila->fecha) ?></span>
+                                            <span class="note-text"><?= e($fila->texto) ?></span>
+                                            <a href="<?= url('ajustes/nota_eliminar') ?>" class="e_eliminar note-del" data-bind="<?= $fila->id_nota ?>" title="Eliminar">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -327,66 +349,86 @@
             <!-- TAB PLANTILLAS -->
             <div class="tab-pane fade" id="plantillas" role="tabpanel" aria-labelledby="tab_plantillas">
 
-                    <div class="row">
+                <div class="row">
 
-                        <div class="col-md-6">
-                            <h1 class="page-head-line-ingresos">
-                                PLANTILLAS INGRESOS
-                            </h1>
-                            <?php foreach ($rs_plantillas_ing as $fila) { ?>
-                                <div class="alert alert-success" style="width: 100%;">
-                                    <span class="badge badge-success" style="margin-right: 15px;">Dia <?= e((string) $fila->dia) ?> - <?= e((string) $fila->cantidad) ?> €</span>
-                                    <span><?= e($fila->concepto) ?></span>
-                                    <span><a href="<?= url('ajustes/plantilla_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_plantilla ?>">
-                                            <i class="fas fa-trash-alt" style="float: right;" title="eliminar"></i>
-                                        </a></span>
+                    <div class="col-md-6">
+                        <div class="card card-accent-success">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-sign-in-alt"></i> Plantillas ingresos</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="note-list">
+                                    <?php foreach ($rs_plantillas_ing as $fila) { ?>
+                                        <div class="note-item">
+                                            <span class="badge badge-success">Día <?= e((string) $fila->dia) ?> · <?= e((string) $fila->cantidad) ?> €</span>
+                                            <span class="note-text"><?= e($fila->concepto) ?></span>
+                                            <a href="<?= url('ajustes/plantilla_eliminar') ?>" class="e_eliminar note-del" data-bind="<?= $fila->id_plantilla ?>" title="Eliminar">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    <?php } ?>
                                 </div>
-                            <?php } ?>
+                            </div>
                         </div>
-
-                        <div class="col-md-6">
-                            <h1 class="page-head-line-gastos">
-                                PLANTILLAS GASTOS
-                            </h1>
-                            <?php foreach ($rs_plantillas_gto as $fila) { ?>
-                                <div class="alert alert-danger" style="width: 100%;">
-                                    <span class="badge badge-danger" style="margin-right: 15px;">Dia <?= e((string) $fila->dia) ?> - <?= e((string) $fila->cantidad) ?> €</span>
-                                    <span><?= e($fila->concepto) ?></span>
-                                    <span><a href="<?= url('ajustes/plantilla_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_plantilla ?>">
-                                            <i class="fas fa-trash-alt" style="float: right;" title="eliminar"></i>
-                                        </a></span>
-                                </div>
-                            <?php } ?>
-                        </div>
-
                     </div>
+
+                    <div class="col-md-6">
+                        <div class="card card-accent-danger">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="fas fa-sign-out-alt"></i> Plantillas gastos</h2>
+                            </div>
+                            <div class="card-body">
+                                <div class="note-list">
+                                    <?php foreach ($rs_plantillas_gto as $fila) { ?>
+                                        <div class="note-item">
+                                            <span class="badge badge-danger">Día <?= e((string) $fila->dia) ?> · <?= e((string) $fila->cantidad) ?> €</span>
+                                            <span class="note-text"><?= e($fila->concepto) ?></span>
+                                            <a href="<?= url('ajustes/plantilla_eliminar') ?>" class="e_eliminar note-del" data-bind="<?= $fila->id_plantilla ?>" title="Eliminar">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
 
             </div>
 
             <!-- TAB RECORDATORIO -->
             <div class="tab-pane fade" id="recordatorio" role="tabpanel" aria-labelledby="tab_recordatorio">
 
-                    <div class="row">
+                <div class="row">
 
-                        <div class="col-md-6">
-                            <h1 class="page-head-line-gastos">
-                                RECORDATORIOS
-                                <a href="#" class="btn btn-danger b_recordatorio_nuevo" style="float: right; padding: 2px;" data-bind="tipo_0">
-                                <i class="fa fa-plus-circle"></i>
-                                </a>
-                            </h1>
-                            <?php foreach ($rs_recordatorio as $fila) { ?>
-                                <div class="alert alert-danger" style="width: 100%;">
-                                    <span class="badge badge-danger" style="margin-right: 15px;">Mes <?= e((string) $fila->mes) ?> - <?= e((string) $fila->cantidad) ?> €</span>
-                                    <span><?= e($fila->descripcion) ?></span>
-                                    <span><a href="<?= url('ajustes/recordatorio_eliminar') ?>" class="e_eliminar" data-bind="<?= $fila->id_recordatorio ?>">
-                                            <i class="fas fa-trash-alt" style="float: right;" title="eliminar"></i>
-                                        </a></span>
+                    <div class="col-md-6">
+                        <div class="card card-accent-danger">
+                            <div class="card-header">
+                                <h2 class="card-title"><i class="far fa-calendar-check"></i> Recordatorios</h2>
+                                <div class="card-actions">
+                                    <a href="#" class="icon-btn solid-danger b_recordatorio_nuevo" data-bind="tipo_0" title="Nuevo recordatorio">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </a>
                                 </div>
-                            <?php } ?>
+                            </div>
+                            <div class="card-body">
+                                <div class="note-list">
+                                    <?php foreach ($rs_recordatorio as $fila) { ?>
+                                        <div class="note-item">
+                                            <span class="badge badge-danger">Mes <?= e((string) $fila->mes) ?> · <?= e((string) $fila->cantidad) ?> €</span>
+                                            <span class="note-text"><?= e($fila->descripcion) ?></span>
+                                            <a href="<?= url('ajustes/recordatorio_eliminar') ?>" class="e_eliminar note-del" data-bind="<?= $fila->id_recordatorio ?>" title="Eliminar">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            </div>
                         </div>
-
                     </div>
+
+                </div>
 
             </div>
 
@@ -400,41 +442,41 @@
 
 <!-- MODAL WISHLIST -->
 <div class="modal fade" id="modal_wish" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title" id="h_wishlist" style="color: #fff;">Nuevo Wishlist</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header mh-primary">
+                <h5 class="modal-title" id="h_wishlist">Nuevo Wishlist</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Nombre</label>
+                    <label for="wish_nombre">Nombre</label>
                     <input type="text" class="form-control" id="wish_nombre" name="wish_nombre" />
                 </div>
                 <div class="form-group">
-                    <label>Fecha aprox.</label>
+                    <label for="wish_fecha_aprox">Fecha aprox.</label>
                     <input type="text" class="form-control d_picker" id="wish_fecha_aprox" name="wish_fecha_aprox" value="<?= date('Y-m-d') ?>" />
                 </div>
                 <div class="form-group" id="capa_f_final">
-                    <label>Fecha final</label>
+                    <label for="wish_fecha_final">Fecha final</label>
                     <input type="text" class="form-control d_picker" id="wish_fecha_final" name="wish_fecha_final" value="<?= date('Y-m-d') ?>" />
                 </div>
                 <div class="form-group">
-                    <label>Precio aprox.</label>
+                    <label for="wish_precio_aprox">Precio aprox.</label>
                     <input type="text" class="form-control" id="wish_precio_aprox" name="wish_precio_aprox" />
                 </div>
                 <div class="form-group" id="capa_p_final">
-                    <label>Precio final</label>
+                    <label for="wish_precio_final">Precio final</label>
                     <input type="text" class="form-control" id="wish_precio_final" name="wish_precio_final" />
                 </div>
                 <div class="form-group">
-                    <label>Nota</label>
+                    <label for="wish_nota">Nota</label>
                     <textarea class="form-control" id="wish_nota" name="wish_nota"></textarea>
                 </div>
                 <div class="form-group" id="capa_estado">
-                    <label>Estado</label>
+                    <label for="wish_estado">Estado</label>
                     <select class="form-control" id="wish_estado" name="wish_estado">
                         <option value="0">Pendiente</option>
                         <option value="1">Pospuesta</option>
@@ -455,21 +497,21 @@
 
 <!-- MODAL NOTAS -->
 <div class="modal fade" id="modal_nota" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Nueva Nota</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Fecha</label>
+                    <label for="nota_fecha">Fecha</label>
                     <input type="text" class="form-control" id="nota_fecha" name="nota_fecha" value="<?= date('Y-m-d') ?>" />
                 </div>
                 <div class="form-group">
-                    <label>Nota</label>
+                    <label for="nota_texto">Nota</label>
                     <textarea class="form-control" id="nota_texto" name="nota_texto"></textarea>
                 </div>
                 <input type="hidden" id="nota_tipo" name="nota_tipo" />
@@ -484,25 +526,25 @@
 
 <!-- MODAL categorias -->
 <div class="modal fade" id="modal_categorias" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Categoria</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title">Categoría</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Nombre</label>
+                    <label for="categorias_nombre">Nombre</label>
                     <input type="text" class="form-control" id="categorias_nombre" name="categorias_nombre" />
                 </div>
                 <div class="form-group">
-                    <label>Icono</label>
+                    <label for="categorias_icono">Icono</label>
                     <input type="text" class="form-control" id="categorias_icono" name="categorias_icono" />
                 </div>
                 <div class="form-group">
-                    <label>Color</label>
+                    <label for="categorias_color">Color</label>
                     <input type="text" class="form-control" id="categorias_color" name="categorias_color" />
                 </div>
             </div>
@@ -518,25 +560,25 @@
 
 <!-- MODAL PLANTILLAS -->
 <div class="modal fade" id="modal_plantilla" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Nueva Plantilla</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Dia</label>
+                    <label for="plantilla_dia">Día</label>
                     <input type="text" class="form-control" id="plantilla_dia" name="plantilla_dia" />
                 </div>
                 <div class="form-group">
-                    <label>Cantidad</label>
+                    <label for="plantilla_cantidad">Cantidad</label>
                     <input type="text" class="form-control" id="plantilla_cantidad" name="plantilla_cantidad" />
                 </div>
                 <div class="form-group">
-                    <label>Concepto</label>
+                    <label for="plantilla_concepto">Concepto</label>
                     <textarea class="form-control" id="plantilla_concepto" name="plantilla_concepto"></textarea>
                 </div>
                 <input type="hidden" id="plantilla_tipo" name="plantilla_tipo" />
@@ -551,25 +593,25 @@
 
 <!-- MODAL recordatorios -->
 <div class="modal fade" id="modal_recordatorio" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Nuevo recordatorio</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Mes</label>
+                    <label for="recordatorio_mes">Mes</label>
                     <input type="text" class="form-control" id="recordatorio_mes" name="recordatorio_mes" />
                 </div>
                 <div class="form-group">
-                    <label>Cantidad</label>
+                    <label for="recordatorio_cantidad">Cantidad</label>
                     <input type="text" class="form-control" id="recordatorio_cantidad" name="recordatorio_cantidad" />
                 </div>
                 <div class="form-group">
-                    <label>Descripcion</label>
+                    <label for="recordatorio_descripcion">Descripción</label>
                     <textarea class="form-control" id="recordatorio_descripcion" name="recordatorio_descripcion"></textarea>
                 </div>
                 <input type="hidden" id="recordatorio_tipo" name="recordatorio_tipo" />
@@ -584,17 +626,17 @@
 
 <!-- MODAL AJUSTE -->
 <div class="modal fade" id="modal_aj_anual" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Ajuste anual</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Cantidad Margen</label>
+                    <label for="aj_anual">Cantidad Margen</label>
                     <input type="text" class="form-control" id="aj_anual" name="aj_anual" />
                 </div>
             </div>
@@ -608,21 +650,21 @@
 
 <!-- MODAL NOMENCLATURA -->
 <div class="modal fade" id="modal_nomenclatura" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Nomenclatura</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Código</label>
+                    <label for="nomenclatura_codigo">Código</label>
                     <input type="text" class="form-control" id="nomenclatura_codigo" name="nomenclatura_codigo" maxlength="2" />
                 </div>
                 <div class="form-group">
-                    <label>Texto</label>
+                    <label for="nomenclatura_texto">Texto</label>
                     <input type="text" class="form-control" id="nomenclatura_texto" name="nomenclatura_texto" maxlength="50" />
                 </div>
             </div>

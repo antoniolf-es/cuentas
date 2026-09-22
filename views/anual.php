@@ -1,109 +1,97 @@
-<style>
-    td, th {
-        text-align: center !important;
-    }
-</style>
-
 <!-- GRAFICOS -->
 <script src="<?= url('assets/js/chart.js') ?>"></script>
 
 <div class="row">
 
-    <div class="col-md-7">
+    <div class="col-lg-7">
 
-        <div class="row">
+        <div class="card card-accent-primary card-table">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-table"></i> Resumen <?= e($anio ?? '') ?></h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="anual" class="table table-striped table-centered">
+                        <thead>
+                            <tr>
+                                <th>Mes</th>
+                                <th>Ingresos</th>
+                                <th>Gastos</th>
+                                <th>Ahorro</th>
+                                <th>Margen</th>
+                                <th>Debe/Haber</th>
+                            </tr>
+                        </thead>
 
-            <table id="anual" class="table table-striped" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th style="width: 15%;">Mes</th>
-                        <th style="width: 15%;">Ingresos</th>
-                        <th style="width: 15%;">Gastos</th>
-                        <th style="width: 15%;">Ahorro</th>
-                        <th style="width: 15%;">Margen</th>
-                        <th style="width: 25%;">Debe/Haber</th>
-                    </tr>
-                </thead>
+                        <tbody>
+                            <?php
+                            $g_meses_arr = array ();
+                            $g_ingresos_arr = array ();
+                            $g_gastos_arr = array ();
+                            $g_ahorro_arr = array ();
+                            $g_margen_arr = array ();
+                            $media = 0;
+                            $media_ingresos = 0;
+                            $media_gastos = 0;
+                            $media_ahorro = 0;
+                            $media_margen = 0;
+                            $cont = 0;
+                            $total_gastos_general = 0;
+                            $total_meses = count($rs);
+                            $debe_haber_acum = $debe_haber;
+                            foreach ($rs as $fila) {
+                                $cont++;
+                                $debe_haber_acum += $fila->total_ahorro;
+                                $mes_txt = mes_nombre((int) $fila->mes);
+                                $g_meses_arr [] = $mes_txt;
+                                $g_ingresos_arr [] = $fila->total_ingresos;
+                                $g_gastos_arr [] = $fila->total_gastos;
+                                $g_ahorro_arr [] = $fila->total_ahorro;
+                                $g_margen_arr [] = $fila->total_margen;
+                                $media++;
+                                $media_ingresos+= $fila->total_ingresos;
+                                $media_gastos+= $fila->total_gastos;
+                                $media_ahorro+= $fila->total_ahorro;
+                                $media_margen+= $fila->total_margen;
+                                $total_gastos_general += $fila->total_gastos;
 
-                <tbody>
-                    <?php
-                    $g_meses_arr = array ();
-                    $g_ingresos_arr = array ();
-                    $g_gastos_arr = array ();
-                    $g_ahorro_arr = array ();
-                    $g_margen_arr = array ();
-                    $media = 0;
-                    $media_ingresos = 0;
-                    $media_gastos = 0;
-                    $media_ahorro = 0;
-                    $media_margen = 0;
-                    $cont = 0;
-                    $total_gastos_general = 0;
-                    $total_meses = count($rs);
-                    $debe_haber_acum = $debe_haber;
-                    foreach ($rs as $fila) {
-                        $cont++;
-                        $debe_haber_acum += $fila->total_ahorro;
-                        $mes_txt = mes_nombre((int) $fila->mes);
-                        $g_meses_arr [] = $mes_txt;
-                        $g_ingresos_arr [] = $fila->total_ingresos;
-                        $g_gastos_arr [] = $fila->total_gastos;
-                        $g_ahorro_arr [] = $fila->total_ahorro;
-                        $g_margen_arr [] = $fila->total_margen;
-                        $media++;
-                        $media_ingresos+= $fila->total_ingresos;
-                        $media_gastos+= $fila->total_gastos;
-                        $media_ahorro+= $fila->total_ahorro;
-                        $media_margen+= $fila->total_margen;
-                        $total_gastos_general += $fila->total_gastos;
+                                //para destacar el ultimo debe haber
+                                if ($cont == $total_meses){
+                                    $clase = "badge badge-primary";
+                                }else{
+                                    $clase = "badge badge-secondary";
+                                }
+                                ?>
+                                <tr>
+                                    <td><?= $mes_txt ?></td>
+                                    <td><span class="badge badge-success"><?= e((string) $fila->total_ingresos) ?> €</span></td>
+                                    <td><span class="badge badge-danger"><?= e((string) $fila->total_gastos) ?> €</span></td>
+                                    <td><span class="badge badge-warning"><?= e((string) $fila->total_ahorro) ?> €</span></td>
+                                    <td><span class="badge badge-info"><?= e((string) $fila->total_margen) ?> €</span></td>
+                                    <td><span class="<?= $clase ?>"><?= e((string) $debe_haber_acum) ?> €</span></td>
+                                </tr>
+                            <?php } ?>
+                        </tbody>
 
-                        //para destacar el ultimo debe haber
-                        if ($cont == $total_meses){
-                            $clase = "badge badge-primary";
-                        }else{
-                            $clase = "badge badge-secondary";
-                        }
-                        ?>
-                        <tr>
-                            <td><?= $mes_txt ?></td>
-                            <td><span class="badge badge-success"><?= e((string) $fila->total_ingresos) ?> €</span></td>
-                            <td><span class="badge badge-danger"><?= e((string) $fila->total_gastos) ?> €</span></td>
-                            <td><span class="badge badge-warning"><?= e((string) $fila->total_ahorro) ?> €</span></td>
-                            <td><span class="badge badge-info"><?= e((string) $fila->total_margen) ?> €</span></td>
-                            <td><span class="<?= $clase ?>"><?= e((string) $debe_haber_acum) ?> €</span></td>
-                        </tr>
-                    <?php } ?>
-                </tbody>
+                        <tfoot>
+                            <tr>
+                                <td>Media</td>
+                                <td><span class="badge badge-success"><?= $media ? round($media_ingresos/$media,2) : 0 ?> €</span></td>
+                                <td><span class="badge badge-danger"><?= $media ? round($media_gastos/$media,2) : 0 ?> €</span></td>
+                                <td><span class="badge badge-warning"><?= $media ? round($media_ahorro/$media,2) : 0 ?> €</span></td>
+                                <td><span class="badge badge-info"><?= $media ? round($media_margen/$media,2) : 0 ?> €</span></td>
+                                <td><span class="badge badge-primary"><?= e((string) round($debe_haber_acum, 2)) ?> €</span></td>
+                            </tr>
+                        </tfoot>
 
-                <thead>
-                    <tr>
-                        <th>Media</th>
-                        <th>
-                            <span class="badge badge-secondary" style="background-color:rgb(19, 94, 36)" ><?= $media ? round($media_ingresos/$media,2) : 0 ?> €</span>
-                        </th>
-                        <th>
-                            <span class="badge badge-secondary" style="background-color: rgb(172, 28, 28)"><?= $media ? round($media_gastos/$media,2) : 0 ?> €</span>
-                        </th>
-                        <th>
-                            <span class="badge badge-secondary" style="background-color: rgb(161, 118, 23)"><?= $media ? round($media_ahorro/$media,2) : 0 ?> €</span>
-                        </th>
-                        <th>
-                            <span class="badge badge-secondary" style="background-color:rgb(25, 116, 168)"><?= $media ? round($media_margen/$media,2) : 0 ?> €</span>
-                        </th>
-                        <th>
-                            <span class="badge badge-dark" style="background-color: rgb(36, 19, 94)"><?= e((string) round($debe_haber_acum, 2)) ?> €</span>
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-
-            </table>
-
+                    </table>
+                </div>
+            </div>
         </div>
 
     </div>
 
-    <div class="col-md-5">
+    <div class="col-lg-5">
 
         <?php
         //preparamos los datos para el grafico tarta
@@ -111,11 +99,17 @@
         $arr_valor = array ();
         $arr_color = array();
         $arr_label = array();
+        $arr_nombre = array();
+        $a_nombre = array();
+        foreach ($categorias as $c) {
+            $a_nombre[(int) $c->id] = $c->nombre;
+        }
         // ordenamos gastos_cat_arr por valor descendente
         arsort($gastos_cat_arr);
 
         foreach ($gastos_cat_arr as $key => $value) {
             $arr_categoria[] = $key;
+            $arr_nombre[] = $a_nombre[$key] ?? $key;
             $valor = round($value,2);
             $arr_valor[] = $valor;
             $arr_color[] = $a_color[$key] ?? '#000000';
@@ -123,66 +117,84 @@
         }
         ?>
 
-        <div id="container" style="margin-top: 10px; margin-left: 15px;">
-            <div id="left" style="float: left; width: 15%; text-align: left;">
-                <?php foreach ($arr_color as $key => $value) {
-                    $icono = $a_icono_color[$value] ?? '';
-                    ?>
-                    <i class="<?= $icono ?>" style="color: <?= $value ?>; border-left: 10px solid <?= $value ?>; padding: 3px; margin: 5px;"></i><br>
-                <?php } ?>
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-chart-pie"></i> Gastos por categoría</h2>
             </div>
-            <div id="right" style="float: right; width: 85%; text-align: left;">
-                <canvas id="chart_categorias" width="250" height="250"></canvas>
+            <div class="card-body">
+                <div class="cat-chart">
+                    <canvas id="chart_categorias" width="250" height="250"></canvas>
+                    <div class="cat-legend">
+                        <?php foreach ($arr_color as $key => $value) {
+                            $icono = $a_icono_color[$value] ?? '';
+                        ?>
+                            <span class="cat-chip" style="--chip: <?= $value ?>" title="<?= e($arr_nombre[$key] ?? '') ?>">
+                                <i class="<?= $icono ?>"></i>
+                            </span>
+                        <?php } ?>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
 
     <!-- Grafico lineas -->
-    <div class="col-md-8" style="width:100%;">
-        <canvas id="myChart"></canvas>
+    <div class="col-12 mt-3">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-chart-line"></i> Evolución mensual</h2>
+            </div>
+            <div class="card-body">
+                <div class="chart-box-lg">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Alertas y botones -->
-    <div class="col-md-12" style="margin: 0 auto; text-align: center; padding-top: 20px;">
+    <div class="col-12">
         <?php if (!empty($msg_ok)) { ?>
-            <div class="alert alert-success" style="width: 100%;"><?= e($msg_ok) ?></div>
+            <div class="alert alert-success"><?= e($msg_ok) ?></div>
         <?php } ?>
         <?php if (!empty($msg_ko)) { ?>
-            <div class="alert alert-danger" style="width: 100%;"><?= e($msg_ko) ?></div>
+            <div class="alert alert-danger"><?= e($msg_ko) ?></div>
         <?php } ?>
 
-        <button type="button" class="btn btn-primary" id="menu_anterior" <?php if (!$anterior) echo "disabled";  ?>>
-            <i class="fa fa-arrow-left fa-2x"></i>
-        </button>
-
-        <button type="button" class="btn btn-primary" style="margin-left: 25px" id="b_anio" >
-            <i class="fa fa-table"></i> Año
-        </button>
-        <a href="<?= url('anual/presupuesto') ?>" class="btn btn-primary" style="margin-left: 15px;" id="b_presupuesto" >
-            <i class="fa fa-calculator"></i> Presupuesto
-        </a>
-        <button type="button" class="btn btn-primary" style="margin-left: 25px;" id="menu_siguiente" <?php if (!$posterior) echo "disabled";  ?> >
-            <i class="fa fa-arrow-right fa-2x"></i>
-        </button>
+        <div class="toolbar">
+            <div class="btn-group toolbar-group" role="group" aria-label="Navegación del año">
+                <button type="button" class="btn" id="menu_anterior" title="Año anterior" <?php if (!$anterior) echo "disabled";  ?>>
+                    <i class="fa fa-arrow-left"></i>
+                </button>
+                <button type="button" class="btn" id="b_anio">
+                    <i class="fa fa-table"></i> Año
+                </button>
+                <a href="<?= url('anual/presupuesto') ?>" class="btn" id="b_presupuesto">
+                    <i class="fa fa-calculator"></i> Presupuesto
+                </a>
+                <button type="button" class="btn" id="menu_siguiente" title="Año siguiente" <?php if (!$posterior) echo "disabled";  ?>>
+                    <i class="fa fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
     </div>
-
 
 </div><!-- #row -->
 
 <!-- MODALS -->
 <div class="modal fade" id="modal_anio" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <h5 class="modal-title" style="color: #fff;">Escoge Año</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <div class="modal-header mh-primary">
+                <h5 class="modal-title">Escoger año</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
-                    <label>Año</label>
+                    <label for="m_anio">Año</label>
                     <select class="form-control" id="m_anio" name="m_anio">
                         <?php foreach ($anios as $fila) { ?>
                             <option value="<?= e($fila) ?>"><?= e($fila) ?></option>
@@ -258,26 +270,26 @@
             datasets: [
                 {
                     label: 'Ingresos',
-                    backgroundColor: 'rgba(75, 192, 192, 1)',
-                    borderColor: 'rgba(75, 192, 192, 1)',
+                    backgroundColor: 'rgba(124, 211, 149, 1)',
+                    borderColor: 'rgba(124, 211, 149, 1)',
                     data: ingresos_arr,
                     fill: false,
                 }, {
                     label: 'Gastos',
-                    backgroundColor: 'rgba(255, 99, 132, 1)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
+                    backgroundColor: 'rgba(255, 122, 135, 1)',
+                    borderColor: 'rgba(255, 122, 135, 1)',
                     data: gastos_arr,
                     fill: false,
                 }, {
                     label: 'Ahorro',
-                    backgroundColor: 'rgba(255, 206, 86, 1)',
-                    borderColor: 'rgba(255, 206, 86, 1)',
+                    backgroundColor: 'rgba(255, 213, 79, 1)',
+                    borderColor: 'rgba(255, 213, 79, 1)',
                     data: ahorro_arr,
                     fill: false,
                 }, {
                     label: 'Margen',
-                    backgroundColor: 'rgba(54, 162, 235, 1)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(90, 159, 255, 1)',
+                    borderColor: 'rgba(90, 159, 255, 1)',
                     data: margen_arr,
                     fill: false,
                 }
@@ -285,13 +297,14 @@
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: false,
-                fontColor: '#E0E0E0'
+                fontColor: '#97A0B5'
             },
             legend: {
                 labels: {
-                    fontColor: '#E0E0E0'
+                    fontColor: '#97A0B5'
                 }
             },
             tooltips: {
@@ -309,27 +322,27 @@
                         display: true,
                         scaleLabel: {
                             display: false,
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         ticks: {
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         gridLines: {
-                            color: '#555555'
+                            color: 'rgba(255, 255, 255, 0.08)'
                         }
                     }],
                 yAxes: [{
                         display: true,
                         scaleLabel: {
                             display: false,
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         ticks: {
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         gridLines: {
-                            color: '#555555',
-                            zeroLineColor: '#555555'
+                            color: 'rgba(255, 255, 255, 0.08)',
+                            zeroLineColor: 'rgba(255, 255, 255, 0.16)'
                         }
                     }]
             }
@@ -358,7 +371,7 @@
             legend: {
                 display: false,
                 labels: {
-                    fontColor: '#E0E0E0'
+                    fontColor: '#97A0B5'
                 }
             },
             tooltips: {

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html lang="es">
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="author" content="Antonio LF" />
-        <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"><![endif]-->
         <title>Cuentas</title>
 
         <link href="<?= asset('css/bootstrap.css') ?>" rel="stylesheet" />
@@ -22,95 +21,98 @@
         <script src="<?= asset('js/common.js') ?>"></script>
     </head>
     <body>
-        <!-- LOGO HEADER END-->
-        <section class="menu-section">
+        <?php
+        if ($pagina === 'Inicio') {
+            $titulo_icono = 'fa fa-table';
+            $titulo_txt = e($mes_txt ?? '') . ' ' . e($anio ?? '');
+        } elseif ($pagina === 'Anual') {
+            $titulo_icono = 'fas fa-chart-bar';
+            $titulo_txt = e($pagina) . ' ' . e($anio ?? '');
+        } elseif ($pagina === 'Presupuesto') {
+            $titulo_icono = 'fas fa-calculator';
+            $titulo_txt = 'Presupuesto';
+        } elseif ($pagina === 'Global') {
+            $titulo_icono = 'fa fa-globe';
+            $titulo_txt = e($pagina);
+        } elseif ($pagina === 'Ajustes') {
+            $titulo_icono = 'fas fa-cog';
+            $titulo_txt = e($pagina);
+        } elseif ($pagina === 'Gastos') {
+            $titulo_icono = 'fa fa-columns';
+            $titulo_txt = 'Informe de gastos';
+        } else {
+            $titulo_icono = 'fa fa-table';
+            $titulo_txt = e($pagina ?? 'Cuentas');
+        }
+
+        $es_inicio = ($pagina === 'Inicio');
+        $es_anual = in_array($pagina, ['Anual', 'Presupuesto'], true);
+        $es_global = ($pagina === 'Global');
+        $es_ajustes = ($pagina === 'Ajustes');
+        ?>
+        <header class="topbar">
             <div class="container">
-                <div class="row">
-                    <?php
-                    if ($pagina === 'Inicio') {
-                        $titulo = '<i class="fa fa-table" aria-hidden="true"></i> ' . e($mes_txt ?? '') . ' ' . e($anio ?? '');
-                    } elseif ($pagina === 'Anual') {
-                        $titulo = '<i class="fas fa-chart-bar" aria-hidden="true"></i> ' . e($pagina) . ' ' . e($anio ?? '');
-                    } elseif ($pagina === 'Presupuesto') {
-                        $titulo = '<i class="fas fa-calculator" aria-hidden="true"></i> Presupuesto';
-                    } elseif ($pagina === 'Global') {
-                        $titulo = '<i class="fa fa-globe" aria-hidden="true"></i> ' . e($pagina);
-                    } elseif ($pagina === 'Ajustes') {
-                        $titulo = '<i class="fas fa-cog" aria-hidden="true"></i> ' . e($pagina);
-                    } else {
-                        $titulo = '<i class="fa fa-table" aria-hidden="true"></i> ' . e($pagina ?? 'Cuentas');
-                    }
-                    ?>
-                    <div class="col-md-5">
-                            <span class="title"><?= $titulo ?></span>
-                    </div>
-
-                    <div class="col-md-7">
-                        <div class="modern-menu-group float-right">
-                            <a href="<?= url('') ?>" class="modern-menu-btn" data-tooltip="Ir al inicio">
-                                <i class="fa fa-table"></i>
-                                <span>Inicio</span>
-                            </a>
-                            <a href="<?= url('anual') ?>" class="modern-menu-btn" data-tooltip="Ver resumen anual">
-                                <i class="fas fa-chart-bar"></i>
-                                <span>Anual</span>
-                            </a>
-                            <a href="<?= url('globales') ?>" class="modern-menu-btn" data-tooltip="Vista global">
-                                <i class="fa fa-globe"></i>
-                                <span>Global</span>
-                            </a>
-                            <a href="<?= url('ajustes') ?>" class="modern-menu-btn" data-tooltip="Configuración">
-                                <i class="fas fa-cog"></i>
-                                <span>Ajustes</span>
-                            </a>
-                        </div>
-                    </div>
-
+                <div class="topbar-inner">
+                    <a href="<?= url('') ?>" class="topbar-brand">
+                        <span class="topbar-brand-icon"><i class="<?= $titulo_icono ?>"></i></span>
+                        <span class="topbar-title"> <?= $titulo_txt ?></span>
+                    </a>
+                    <nav class="topbar-nav">
+                        <a href="<?= url('') ?>" class="topbar-link <?= $es_inicio ? 'active' : '' ?>">
+                            <i class="fa fa-table"></i>
+                            <span>Inicio</span>
+                        </a>
+                        <a href="<?= url('anual') ?>" class="topbar-link <?= $es_anual ? 'active' : '' ?>">
+                            <i class="fas fa-chart-bar"></i>
+                            <span>Anual</span>
+                        </a>
+                        <a href="<?= url('globales') ?>" class="topbar-link <?= $es_global ? 'active' : '' ?>">
+                            <i class="fa fa-globe"></i>
+                            <span>Global</span>
+                        </a>
+                        <a href="<?= url('ajustes') ?>" class="topbar-link <?= $es_ajustes ? 'active' : '' ?>">
+                            <i class="fas fa-cog"></i>
+                            <span>Ajustes</span>
+                        </a>
+                    </nav>
                 </div>
             </div>
-        </section>
-        <!-- MENU SECTION END-->
+        </header>
+
         <div class="content-wrapper">
             <div class="container">
                 <?= $content ?>
-            </div><!-- #container -->
-        </div><!-- #content -->
-
-        <!-- CONTENT-WRAPPER SECTION END-->
-        <div class="footer">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-12" style="text-align: center;">
-                        Antonio LF <i class="fab fa-creative-commons" title="Creative Commons"></i>  <?= date('Y') ?>  | Version 3.0
-                    </div>
-                </div>
             </div>
         </div>
 
-        <!-- VAR JS  -->
+        <footer class="footer">
+            <div class="container text-center">
+                Antonio <span style="color: var(--primary);">LF</span> <i class="fab fa-creative-commons" title="Creative Commons"></i> <?= date('Y') ?> · Versión 3.5
+            </div>
+        </footer>
+
         <input id="id_eliminar" name="id_eliminar" type="hidden" value="" />
         <input id="id_pagina" name="id_pagina" type="hidden" value="<?= e($pagina ?? '') ?>" />
 
-        <!-- ELIMINAR  -->
-        <div id="modal_eliminar" class="modal fade">
-            <div class="modal-dialog modal-sm" role="document">
-                <div class="modal-content bd-0 tx-14">
-                    <div class="modal-header pd-x-20 bg-danger">
-                        <h6 class="tx-14 mg-b-0 tx-uppercase tx-inverse tx-bold" style="color: #fff;">Eliminar</h6>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <div id="modal_eliminar" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header mh-danger">
+                        <h5 class="modal-title">Eliminar</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body pd-20">
-                        <p class="mg-b-5">¿Realmente deseas eliminar?</p>
+                    <div class="modal-body">
+                        <p class="modal-ask">¿Realmente deseas eliminar?</p>
                     </div>
-                    <div class="modal-footer justify-content-center">
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
                         <button type="button" class="btn btn-danger b_eliminar">Eliminar</button>
                     </div>
                 </div>
-            </div><!-- modal-dialog -->
-        </div><!-- modal -->
+            </div>
+        </div>
 
     </body>
 </html>

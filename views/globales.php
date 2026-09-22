@@ -1,9 +1,3 @@
-<style>
-    td, th {
-        text-align: center !important;
-    }
-</style>
-
 <!-- GRAFICOS -->
 <script src="<?= url('assets/js/chart.js') ?>"></script>
 <script src="<?= url('assets/js/utils.js') ?>"></script>
@@ -26,13 +20,14 @@
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: false,
-                fontColor: '#E0E0E0'
+                fontColor: '#97A0B5'
             },
             legend: {
                 labels: {
-                    fontColor: '#E0E0E0'
+                    fontColor: '#97A0B5'
                 }
             },
             tooltips: {
@@ -50,27 +45,27 @@
                         display: true,
                         scaleLabel: {
                             display: false,
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         ticks: {
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         gridLines: {
-                            color: '#555555'
+                            color: 'rgba(255, 255, 255, 0.08)'
                         }
                     }],
                 yAxes: [{
                         display: true,
                         scaleLabel: {
                             display: false,
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         ticks: {
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         gridLines: {
-                            color: '#555555',
-                            zeroLineColor: '#555555'
+                            color: 'rgba(255, 255, 255, 0.08)',
+                            zeroLineColor: 'rgba(255, 255, 255, 0.16)'
                         }
                     }]
             }
@@ -85,13 +80,14 @@
         },
         options: {
             responsive: true,
+            maintainAspectRatio: false,
             title: {
                 display: false,
-                fontColor: '#E0E0E0'
+                fontColor: '#97A0B5'
             },
             legend: {
                 labels: {
-                    fontColor: '#E0E0E0'
+                    fontColor: '#97A0B5'
                 }
             },
             tooltips: {
@@ -109,27 +105,27 @@
                         display: true,
                         scaleLabel: {
                             display: false,
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         ticks: {
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         gridLines: {
-                            color: '#555555'
+                            color: 'rgba(255, 255, 255, 0.08)'
                         }
                     }],
                 yAxes: [{
                         display: true,
                         scaleLabel: {
                             display: false,
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         ticks: {
-                            fontColor: '#E0E0E0'
+                            fontColor: '#97A0B5'
                         },
                         gridLines: {
-                            color: '#555555',
-                            zeroLineColor: '#555555'
+                            color: 'rgba(255, 255, 255, 0.08)',
+                            zeroLineColor: 'rgba(255, 255, 255, 0.16)'
                         }
                     }]
             }
@@ -183,88 +179,120 @@
 
 <div class="row">
 
-    <div class="col-md-3" style="margin-top: 20px;">
-        <div id="comparacion">
-            <table id="comparacion_tabla" class="table" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Año</th>
-                        <th>Inicial</th>
-                        <th>Final</th>
-                    </tr>
-                </thead>
-
-            <?php foreach ($global_arr_new AS $key => $row) {
-                $inicial = $iniciales[$key] ?? 0;
-                if ($inicial < $row[12]) {
-                    $tipo = "badge badge-success";
-                } else {
-                    $tipo = "badge badge-danger";
-                }
-            ?>
-                <tr>
-                    <td><?= e((string) $key) ?></td>
-                    <td><span class="badge badge-primary"><?= e((string) $inicial) ?> €</span></td>
-                    <td><span class="<?= $tipo ?>"><?= e((string) $row[12]) ?> €</span></td>
-                </tr>
-
-                <script>
-                addDataset_new(<?= $key ?>,<?= json_encode($row) ?>);
-                </script>
-
-            <?php } ?>
-            </table>
+    <div class="col-lg-4">
+        <div class="card card-accent-primary card-table">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-table"></i> Años recientes</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="comparacion_recientes" class="table table-centered">
+                        <thead>
+                            <tr>
+                                <th>Año</th>
+                                <th>Inicial</th>
+                                <th>Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($global_arr_new AS $key => $row) {
+                            $inicial = $iniciales[$key] ?? 0;
+                            if ($inicial < $row[12]) {
+                                $tipo = "badge badge-success";
+                            } else {
+                                $tipo = "badge badge-danger";
+                            }
+                        ?>
+                            <tr>
+                                <td><?= e((string) $key) ?></td>
+                                <td><span class="badge badge-primary"><?= e((string) $inicial) ?> €</span></td>
+                                <td><span class="<?= $tipo ?>"><?= e((string) $row[12]) ?> €</span></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="col-md-9">
-        <div style="width:100%;">
-            <canvas id="myChart_new"></canvas>
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-chart-line"></i> Evolución · Años recientes</h2>
+            </div>
+            <div class="card-body">
+                <div class="chart-box-lg">
+                    <canvas id="myChart_new"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div><!-- #row -->
+
+<div class="row mt-4">
+
+    <div class="col-lg-4">
+        <div class="card card-table">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-table"></i> Años anteriores</h2>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table id="comparacion_anteriores" class="table table-centered">
+                        <thead>
+                            <tr>
+                                <th>Año</th>
+                                <th>Inicial</th>
+                                <th>Final</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php foreach ($global_arr_old AS $key => $row) {
+                            $inicial = $iniciales[$key] ?? 0;
+                            if ($inicial < $row[12]) {
+                                $tipo = "badge badge-success";
+                            } else {
+                                $tipo = "badge badge-danger";
+                            }
+                        ?>
+                            <tr>
+                                <td><?= e((string) $key) ?></td>
+                                <td><span class="badge badge-primary"><?= e((string) $inicial) ?> €</span></td>
+                                <td><span class="<?= $tipo ?>"><?= e((string) $row[12]) ?> €</span></td>
+                            </tr>
+                        <?php } ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title"><i class="fas fa-chart-line"></i> Evolución · Años anteriores</h2>
+            </div>
+            <div class="card-body">
+                <div class="chart-box-lg">
+                    <canvas id="myChart_old"></canvas>
+                </div>
+            </div>
         </div>
     </div>
 
 </div><!-- #row -->
 
-<div class="row">
+<?php foreach ($global_arr_new AS $key => $row) { ?>
+<script>
+addDataset_new(<?= $key ?>,<?= json_encode($row) ?>);
+</script>
+<?php } ?>
 
-    <div class="col-md-3" style="margin-top: 20px;">
-        <div id="comparacion">
-            <table id="comparacion_tabla" class="table" width="100%" cellspacing="0">
-                <thead>
-                    <tr>
-                        <th>Año</th>
-                        <th>Inicial</th>
-                        <th>Final</th>
-                    </tr>
-                </thead>
-
-            <?php foreach ($global_arr_old AS $key => $row) {
-                $inicial = $iniciales[$key] ?? 0;
-                if ($inicial < $row[12]) {
-                    $tipo = "badge badge-success";
-                } else {
-                    $tipo = "badge badge-danger";
-                }
-            ?>
-                <tr>
-                    <td><?= e((string) $key) ?></td>
-                    <td><span class="badge badge-primary"><?= e((string) $inicial) ?> €</span></td>
-                    <td><span class="<?= $tipo ?>"><?= e((string) $row[12]) ?> €</span></td>
-                </tr>
-
-                <script>
-                addDataset_old(<?= $key ?>,<?= json_encode($row) ?>);
-                </script>
-
-            <?php } ?>
-            </table>
-        </div>
-    </div>
-
-    <div class="col-md-9">
-        <div style="width:100%;">
-            <canvas id="myChart_old"></canvas>
-        </div>
-    </div>
-
-</div><!-- #row -->
+<?php foreach ($global_arr_old AS $key => $row) { ?>
+<script>
+addDataset_old(<?= $key ?>,<?= json_encode($row) ?>);
+</script>
+<?php } ?>
